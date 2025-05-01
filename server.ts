@@ -6,18 +6,13 @@ const express = require('express');
 const multer = require('multer');
 import { Sequelize } from 'sequelize';
 import {Application} from "express";
-
-
 import { getAllUsers } from "./server/get-users.route"; 
 import { updateUser } from "./server/update-user.route";
 import { saveUser } from "./server/save-user.route";
 import { deleteUser } from "./server/delete-user.route";
 import { getUser } from "./server/get-user.route";
-
-
-
+import sequelize from './models/database';
 const cors = require('cors');
-
 const bodyParser = require('body-parser');
 
 const app: Application = express();
@@ -29,21 +24,9 @@ app.use(bodyParser.json());
 //app.use(bodyParser.urlencoded({ extended: true }));
 
 
-// Configuración de Sequelize para conectarse a SQL Server
-export const sequelize = new Sequelize('express', 'sa', '123', {
-  host: 'localhost',
-  dialect: 'mssql',
-  dialectOptions: {
-      options: {
-          encrypt: true,
-          trustServerCertificate: true
-      }
-  }
-});
-
 // Probar la conexión a la base de datos
 sequelize.authenticate()
-  .then(() => console.log('Conectado a la base de datos SQL Server'))
+  .then(() => console.log('Conectado a la base de datos'))
   .catch(err => console.error('Error de conexión a la base de datos:', err));
 
 

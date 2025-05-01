@@ -1,26 +1,26 @@
 import {Request, Response} from 'express';
 import User from '../models/User';
 
-function mapFrom(el: any): any {        
-    let user:any = {
-        name:el.name,
-        email:el.email
+function mapFrom(changes: any): { name: string; email: string } {
+    return {
+      name: changes.name,
+      email: changes.email,
     };
-    return user;
-}
+  }
 
 export async function saveUser(req: Request, res: Response) {
     try {
-        const changes:any = req.body;
-        console.log('body');
-        console.log(JSON.stringify(req.body));
-        let usercreate: any;
-        usercreate = mapFrom(changes);
-        const user = await User.create(usercreate);
-        res.status(201).json(user);
-    } catch (err) {
-        console.log('error')
-        console.log(err);
-        res.status(500).json({ error: 'Error al obtener usuario' });
+      /* const user = await User.create({
+        name: req.body.name,
+        email: req.body.email,
+      }); */
+      const user = User.build({
+        name: req.body.name,
+        email: req.body.email
+      });
+    await user.save();
+      res.status(201).json(user);
+    } catch (error:any) {
+      res.status(500).json({ error: error.message });
     }
-}
+  }

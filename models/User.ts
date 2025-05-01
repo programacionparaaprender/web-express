@@ -8,31 +8,66 @@ class User
   public email!: string;
 }
 
-User.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-      allowNull: false,
+import config from '../config2/config';
+
+const environment = process.env.NODE_ENV || 'development';
+const configEnv = config[environment];
+
+if(configEnv.dialect === 'mysql'){
+  User.init(
+    {
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
+    {
+      sequelize,
+      modelName: 'User',
+      tableName: 'users', // Asegúrate de que el nombre de la tabla coincida
+      timestamps: true // Habilita createdAt y updatedAt
+    }
+  );
+
+}else{
+  User.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+        allowNull: false,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-  },
-  {
-    sequelize,
-    modelName: 'User',
-    tableName: 'Users', // Asegúrate de que el nombre de la tabla coincida
-    timestamps: true // Habilita createdAt y updatedAt
-  }
-);
+    {
+      sequelize,
+      modelName: 'User',
+      tableName: 'users', // Asegúrate de que el nombre de la tabla coincida
+      timestamps: true // Habilita createdAt y updatedAt
+    }
+  );
+}
+
+
 
 
 
